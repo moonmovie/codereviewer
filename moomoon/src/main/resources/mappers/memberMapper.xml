@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="moomoon_member">
+
+	<insert id="signup" parameterType="com.moomoon.domain.MemberVO">
+		INSERT INTO moomoon.members(userId, userPass, userName, userPhon)
+			VALUES(#{userId}, #{userPass}, #{userName}, #{userPhon})
+	</insert>
+	
+	<select id="signin" resultType="com.moomoon.domain.MemberVO">
+		select 
+			userId, userPass, userName, userPhon, userAddr1, userAddr2, userAddr3, regiDate, verify
+		from
+			moomoon.members
+		where 
+			userId=#{userId}
+	</select>
+	
+	<resultMap type="com.moomoon.domain.MemberVO" id="MemberVOmap">
+		<result column="userId" property="userId"/>
+		<result column="userPass" property="userPass"/>
+		<result column="userName" property="userName"/>
+		<result column="userPhon" property="userPhon"/>
+		<result column="useraddr1" property="useraddr1"/>
+		<result column="useraddr2" property="useraddr2"/>
+		<result column="useraddr3" property="useraddr3"/>
+		<result column="regiDate" property="regiDate"/>
+		<result column="verify" property="verify"/>
+	</resultMap>
+	
+	<resultMap type="com.moomoon.domain.ReviewerVO" id="ReviewerVOmap">
+		<result column="reviewer" property="reviewer"/>
+		<result column="lang" property="lang"/>
+		<result column="star" property="star"/>
+	</resultMap>
+	
+	<resultMap type="com.moomoon.domain.transFormVO" id="transFormVOmap">
+		<collection property="reviewer" resultMap="ReviewerVOmap"></collection>
+		<collection property="member" resultMap="MemberVOmap"></collection>
+	</resultMap>
+	
+	<select id="best_reviewer" resultMap="transFormVOmap">
+		SELECT userName, star, lang FROM moomoon.members
+		JOIN moomoon.reviewer
+		ON reviewer.reviewer = members.userId
+		ORDER BY star DESC
+		LIMIT 3
+	</select>
+	
+	<select id="reviewerModify" parameterType="com.moomoon.domain.ReviewerVO">
+		INSERT INTO moomoon.reviewer(reviewer, lang)
+			VALUES(#{reviewer}, #{lang})
+	</select>
+	
+	<update id="verify_reviewer" parameterType="com.moomoon.domain.MemberVO">
+		UPDATE moomoon.members
+		SET verify=1
+		WHERE userId=#{userId}
+	</update>
+	
+	<insert id="entitled_reviewer" parameterType="com.moomoon.domain.ReviewerVO">
+		INSERT INTO moomoon.reviewer(reviewer, lang)
+		VALUES (#{reviewer}, #{lang})
+	</insert>
+
+</mapper>

@@ -1,0 +1,31 @@
+.main_banner{
+	background-image: url("../img/main.png");
+	max-width:100%;
+	height: auto;
+	background-size: cover;
+	position: relative;
+}
+.cover{
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	background-color: rgba(0, 0, 0, 0.2);
+	
+	z-index: 1; 
+}
+.banner_text{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	
+	font-size: 1rem;
+	color: white;
+	z-index: 2;
+	text-align: center;
+}
+.bReviewer{
+	background-color:red;
+	width: 20px;
+	height: 100px;
+}
